@@ -2,6 +2,9 @@ import {inject, Injectable} from '@angular/core';
 import {io, Socket} from 'socket.io-client';
 import {Subject} from 'rxjs';
 import {AlarmService} from './alarm.service';
+import {AlarmData} from '../interfaces/alarm-data';
+import {adaptBackendToAlarmData} from '../adapter/alarm-data-adapter';
+import {ConnectionStatus} from '../interfaces/connection-status';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +13,18 @@ export class WebsocketService {
 
   private socket: Socket;
   private messageSubject = new Subject<string>();
-  private alarmNotificationSubject = new Subject<any>();
-  private connectionStatusSubject = new Subject<string>();
+  private alarmNotificationSubject = new Subject<AlarmData>();
+  private connectionStatusSubject = new Subject<ConnectionStatus>();
   // add signalService
   private signalService = inject(AlarmService);
 
   // private serverUrl = 'http://localhost:3000';
   private serverUrl = 'https://websocket-alarm.onrender.com';
 
-  private clientInfo: any = {
-    name: 'Angular Client',
-    role: 'cai', // O el rol que corresponda
-    location: 'Central Station'
+  private clientInfo: any = { // esto sería la información del CAI, puede ser una coneccion a la base de datos
+    name: 'CAI Client',
+    role: 'cai',
+    location: 'Marruecos'
   };
 
   constructor() {
@@ -36,7 +39,7 @@ export class WebsocketService {
   private setupSocketListeners(): void {
     this.socket.on('connect', () => {
       console.info('Connected to Socket.IO server');
-      this.connectionStatusSubject.next('Connected');
+      this.connectionStatusSubject.next(ConnectionStatus.CONNECT);
 
       // Una vez conectado, registrarse automáticamente
       this.registerWithServer();
@@ -44,12 +47,12 @@ export class WebsocketService {
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected from Socket.IO server');
-      this.connectionStatusSubject.next('Disconnected');
+      this.connectionStatusSubject.next(ConnectionStatus.DISCONNECT);
     });
 
     this.socket.on('connect_error', (error) => {
       console.error('Connection error:', error);
-      this.connectionStatusSubject.next('Connection Error');
+      this.connectionStatusSubject.next(ConnectionStatus.CONNECTION_ERROR);
     });
 
     this.socket.on('request-register', (data: any) => {
@@ -59,7 +62,7 @@ export class WebsocketService {
 
     this.socket.on('registered', (data: any) => {
       console.log('Registered successfully:', data);
-      this.connectionStatusSubject.next('Registered');
+      this.connectionStatusSubject.next(ConnectionStatus.REGISTER);
     });
 
     this.socket.on('alarm', (data: any) => {
@@ -76,15 +79,9 @@ export class WebsocketService {
 
     this.socket.on('alarm_broadcast', (backendData: any) => {
       const data = backendData.data;
-      this.signalService.addSignal({
-        id: data.id ?? crypto.randomUUID(),
-        name: data.name ?? 'Unknown',
-        cellphone: data.cellphone ?? 'N/A',
-        device: data.device ?? 'N/A',
-        lat: data.lat,
-        lng: data.lng,
-        active: true
-      });
+      // create the Alarm
+      const alarm: AlarmData = adaptBackendToAlarmData(backendData);
+      this.signalService.addSignal(alarm);
       this.alarmNotificationSubject.next(data);
       this.playAlarmSound();
 
@@ -105,7 +102,7 @@ export class WebsocketService {
 
   connect(): void {
     if (!this.socket.connected) {
-      this.connectionStatusSubject.next('Connecting...');
+      this.connectionStatusSubject.next(ConnectionStatus.CONNECTING);
       this.socket.connect();
     }
   }
@@ -113,7 +110,7 @@ export class WebsocketService {
   disconnect(): void {
     if (this.socket.connected) {
       this.socket.disconnect();
-      this.connectionStatusSubject.next('Disconnected');
+      this.connectionStatusSubject.next(ConnectionStatus.DISCONNECT);
     }
   }
 

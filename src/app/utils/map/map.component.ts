@@ -48,7 +48,9 @@ export class MapComponent implements AfterViewInit {
           this.alarmService.signals$.subscribe(signals => {
             signals.forEach(signal => {
               if (signal.active) {
-                this.alarmPaintedService.paintSignal(this.map, signal.id, signal.lng, signal.lat);
+                const lng = signal.alarmUserDevice.location.lng;
+                const lat = signal.alarmUserDevice.location.lat;
+                this.alarmPaintedService.paintSignal(this.map, signal.id, lng, lat);
               } else {
                 this.alarmPaintedService.clearSignal(signal.id, this.map);
               }

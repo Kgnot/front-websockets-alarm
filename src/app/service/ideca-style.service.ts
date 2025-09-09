@@ -6,7 +6,7 @@ import {Injectable} from '@angular/core';
 export class IdecaStyleService {
 
   private readonly TILE_URL = "https://tiles.arcgis.com/tiles/J5ltM0ovtzXUbp7B/arcgis/rest/services/Mapa_Base_Bogot%C3%A1/VectorTileServer/tile/{z}/{y}/{x}.pbf";
-  private readonly SPRITE_URL = "https://tiles.arcgis.com/tiles/J5ltM0ovtzXUbp7B/arcgis/rest/services/Mapa_Base_Bogot%C3%A1/VectorTileServer/resources/sprites/sprite";
+  private readonly SPRITE_URL = "https://tiles.arcgis.com/tiles/J5ltM0ovtzXUbp7B/arcgis/rest/services/Mapa_Base_Bogot%C3%A1/VectorTileServer/resources/sprites/sprite.json";
   private readonly GLYPHS_URL = "https://tiles.arcgis.com/tiles/J5ltM0ovtzXUbp7B/arcgis/rest/services/Mapa_Base_Bogot%C3%A1/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf";
 
 

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {AlarmData} from '../interfaces/alarmData';
+import {AlarmData} from '../interfaces/alarm-data';
 
 
 @Injectable({

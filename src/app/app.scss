@@ -1,6 +1,7 @@
-.app-section{
+.app-section {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
 }
