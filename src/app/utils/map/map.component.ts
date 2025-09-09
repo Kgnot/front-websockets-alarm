@@ -1,9 +1,10 @@
-import {AfterViewInit, Component, inject} from '@angular/core';
+import {AfterViewInit, Component, Inject, inject, PLATFORM_ID} from '@angular/core';
 import * as maplibregl from 'maplibre-gl';
 import {MapService} from '../../service/map.service';
 import {IdecaStyleService} from '../../service/ideca-style.service';
 import {AlarmPaintedService} from '../../service/alarm-painted.service';
 import {AlarmService} from '../../service/alarm.service';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-map',
@@ -15,12 +16,19 @@ export class MapComponent implements AfterViewInit {
 
   private mapService = inject(MapService);
   private idecaStyleService = inject(IdecaStyleService);
-  private alarmService = inject(AlarmPaintedService);
-  private signalService = inject(AlarmService);
+  private alarmPaintedService = inject(AlarmPaintedService);
+  private alarmService = inject(AlarmService);
 
   private map!: maplibregl.Map;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  }
+
   async ngAfterViewInit(): Promise<void> {
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     this.mapService.getIDECA_style().subscribe({
       next: (IDECA_style) => {
@@ -37,12 +45,12 @@ export class MapComponent implements AfterViewInit {
 
         this.map.on('load', () => {
 
-          this.signalService.signals$.subscribe(signals => {
+          this.alarmService.signals$.subscribe(signals => {
             signals.forEach(signal => {
               if (signal.active) {
-                this.alarmService.paintSignal(this.map, signal.id, signal.lng, signal.lat);
+                this.alarmPaintedService.paintSignal(this.map, signal.id, signal.lng, signal.lat);
               } else {
-                this.alarmService.clearSignal(signal.id, this.map);
+                this.alarmPaintedService.clearSignal(signal.id, this.map);
               }
             });
           });
