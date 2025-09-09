@@ -18,8 +18,8 @@ export class WebsocketService {
   // add signalService
   private signalService = inject(AlarmService);
 
-  // private serverUrl = 'http://localhost:3000';
-  private serverUrl = 'https://websocket-alarm.onrender.com';
+  private serverUrl = 'http://localhost:3000';
+  // private serverUrl = 'https://websocket-alarm.onrender.com';
 
   private clientInfo: any = { // esto sería la información del CAI, puede ser una coneccion a la base de datos
     name: 'CAI Client',

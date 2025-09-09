@@ -19,27 +19,11 @@
 
   <div class="notifications">
     @for (notification of notifications(); track notification.id) {
-      <div class="notification-card">
-        <div class="notification-content" (click)="openModal(notification)">
-          <div class="notification-header">
-            <span class="notification-user">{{ notification.user?.name || 'Nombre usuario' }}</span>
-            <span class="notification-time">
-              {{ (notification.alarmUserDevice?.location?.timestamp | date:'shortTime') ?? 'Hora desconocida' }}
-            </span>
-          </div>
-
-          <div class="notification-body">
-            <div class="notification-title">Alarma</div>
-            <div class="notification-location">
-              {{ notification.user?.address || 'Dirección desconocida' }}
-            </div>
-          </div>
-        </div>
-
-        <div class="notification-action">
-          <span class="material-icons">volume_up</span>
-        </div>
-      </div>
+      <app-notification
+        [notification]="notification"
+        (openModalEvent)="openModal($event)"
+        (deleteNotification)="deleteNotification($event)"
+      />
     }
   </div>
 
@@ -63,4 +47,5 @@
       <button (click)="closeModal()">Cerrar</button>
     </menu>
   </dialog>
+
 </section>

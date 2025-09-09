@@ -1,0 +1,198 @@
+
+.notification-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: var(--alarm-card-background-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem 1.2rem;
+  border-left: var(--alarm-border-left);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.notification-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-user {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #222;
+}
+
+.notification-time {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.notification-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.notification-title {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.notification-location {
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.notification-action {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  color: #333;
+  cursor: pointer;
+
+  &:hover {
+    color: #007bff;
+  }
+}
+
+/* Dialog */
+dialog {
+  border: none;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  max-width: 380px;
+  width: 90%;
+  background: #fff;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Título y texto */
+dialog h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+}
+
+dialog p {
+  margin: 0.5rem 0 1rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Acciones del diálogo */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.dialog-actions button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease;
+}
+
+/* Botón confirmar */
+.dialog-actions button:first-child {
+  background: #e53935;
+  color: #fff;
+}
+
+.dialog-actions button:first-child:hover {
+  background: #c62828;
+}
+
+/* Botón cancelar */
+.dialog-actions button:last-child {
+  background: #f1f1f1;
+  color: #333;
+}
+
+.dialog-actions button:last-child:hover {
+  background: #ddd;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/*
+*----------------
+*/
+
+.notification-action {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.notification-action span.material-icons {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.notification-action span.material-icons:hover {
+  color: #007bff;
+}
+
+/* Botón eliminar */
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn span.material-icons {
+  font-size: 1.4rem;
+  color: #e53935;
+}
+
+.delete-btn:hover {
+  background: rgba(229, 57, 53, 0.1);
+}
+
+.delete-btn:hover span.material-icons {
+  color: #c62828;
+}
