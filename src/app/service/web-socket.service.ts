@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { io, Socket } from 'socket.io-client';
-import { Subject } from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {io, Socket} from 'socket.io-client';
+import {Subject} from 'rxjs';
+import {AlarmService} from './alarm.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ export class WebsocketService {
   private messageSubject = new Subject<string>();
   private alarmNotificationSubject = new Subject<any>();
   private connectionStatusSubject = new Subject<string>();
+  // add signalService
+  private signalService = inject(AlarmService);
 
   // private serverUrl = 'http://localhost:3000';
   private serverUrl = 'https://websocket-alarm.onrender.com';
@@ -63,7 +66,18 @@ export class WebsocketService {
       console.log('Alarm response received:', data);
       this.messageSubject.next(JSON.stringify(data));
 
+      this.signalService.addSignal({
+        id: data.id ?? crypto.randomUUID(),
+        name: data.name ?? 'Unknown',
+        cellphone: data.cellphone ?? 'N/A',
+        device: data.device ?? 'N/A',
+        lat: data.location.lat,
+        lng: data.location.lng,
+        active: true
+      });
+
       if (data.status === 'received') {
+        //sound alarm
         this.playAlarmSound();
       }
     });
@@ -133,8 +147,8 @@ export class WebsocketService {
     }
   }
 
-  updateClientInfo(info: Partial<{name: string, role: string, location: any}>): void {
-    this.clientInfo = { ...this.clientInfo, ...info };
+  updateClientInfo(info: Partial<{ name: string, role: string, location: any }>): void {
+    this.clientInfo = {...this.clientInfo, ...info};
 
     if (this.socket.connected) {
       this.registerWithServer();
@@ -158,6 +172,6 @@ export class WebsocketService {
   }
 
   getClientInfo() {
-    return { ...this.clientInfo };
+    return {...this.clientInfo};
   }
 }
