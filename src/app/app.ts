@@ -1,21 +1,23 @@
 import {Component} from '@angular/core';
-import {MapComponent} from './utils/map/map.component';
 import {PrincipalPageHome} from './home/_principal-page-home/principal-page-home';
 import {Header} from './utils/header/header';
-import {CoverMainComponent} from './home/cover-main/cover-main.component';
 import {NavbarComponent} from './utils/navbar/navbar.component';
+import {SoundManagerService} from './service/alarm/sound-manager.service';
 
 @Component({
   selector: 'app-root',
   imports: [
-    MapComponent,
     PrincipalPageHome,
     Header,
-    CoverMainComponent,
     NavbarComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App{
+export class App {
+
+  // instancia solamente para crear, no por usabilidad
+  constructor(private soundManagerService: SoundManagerService) {
   }
+
+}

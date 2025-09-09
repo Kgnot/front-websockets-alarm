@@ -3,19 +3,17 @@ import {WebsocketService} from '../../../service/web-socket.service';
 import {ConnectionStatus} from '../../../interfaces/connection-status';
 import {AlarmData} from '../../../interfaces/alarm-data';
 import {Subscription} from 'rxjs';
-import {DatePipe} from '@angular/common';
+import {NotificationComponent} from '../../../utils/notification/notification.component';
 
 @Component({
   selector: 'app-alarm-section',
   imports: [
-    DatePipe
+    NotificationComponent
   ],
   templateUrl: './alarm-section.html',
   styleUrl: './alarm-section.scss'
 })
 export class AlarmSection implements OnInit, OnDestroy {
-
-  protected alarmMessage = '';
   protected isConnected = signal<boolean>(false);
   protected connectionStatus = signal<ConnectionStatus>(ConnectionStatus.DISCONNECT);
   protected notifications = signal<AlarmData[]>([] as AlarmData[]);
@@ -26,7 +24,8 @@ export class AlarmSection implements OnInit, OnDestroy {
   private notificationSubscription!: Subscription;
   private statusSubscription!: Subscription;
 
-  constructor(private webSocketService: WebsocketService) {
+  constructor(
+    private webSocketService: WebsocketService) {
   }
 
   ngOnDestroy(): void {
@@ -67,6 +66,11 @@ export class AlarmSection implements OnInit, OnDestroy {
   openModal(notification: AlarmData) {
     this.selected = notification;
     this.alarmModal.nativeElement.showModal();
+  }
+
+  deleteNotification(notification: AlarmData) {
+    this.notifications.update(notifications => notifications.filter(n =>n.id !== notification.id)
+    )
   }
 
   closeModal() {

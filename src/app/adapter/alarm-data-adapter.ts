@@ -1,7 +1,6 @@
 import {Address, AlarmData, AlarmUserDevice, User, Location} from '../interfaces/alarm-data';
 
-export function adaptBackendToAlarmData(backendData: any): AlarmData {
-  const data = backendData.data;
+export function adaptBackendToAlarmData(data: any): AlarmData {
 
   const alarmLocation: Location = {
     lat: data.lat,
