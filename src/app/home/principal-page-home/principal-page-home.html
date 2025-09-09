@@ -1,0 +1,52 @@
+<div class="container">
+  <h1>Sistema de Alarmas</h1>
+
+  <div class="status">
+    <p>Estado: {{ connectionStatus() }}</p>
+    <p>Cliente: {{ clientInfo().name }} ({{ clientInfo().role }})</p>
+  </div>
+
+  <div class="controls">
+    <button (click)="connect()" [disabled]="isConnected()">Conectar</button>
+    <button (click)="disconnect()" [disabled]="!isConnected()">Desconectar</button>
+
+    <div>
+      <input
+        type="text"
+        [(ngModel)]="alarmMessage"
+        placeholder="Mensaje de alarma"
+      >
+      <button
+        (click)="sendAlarmMessage()"
+        [disabled]="!isConnected()"
+      >
+        Enviar Alarma
+      </button>
+    </div>
+  </div>
+
+  <div class="messages">
+    <h3>Respuestas:</h3>
+    @for (msg of messageList(); track msg) {
+      <div class="message">
+        {{ msg | json }}
+      </div>
+    } @empty {
+      <p>No hay respuestas aún</p>
+    }
+  </div>
+
+  <div class="notifications">
+    <h3>Notificaciones de Alarma:</h3>
+    @for (notification of notifications(); track notification.timestamp) {
+      <div class="notification">
+        <strong>{{ notification.timestamp | date:'short' }}</strong>:
+        {{ notification.message || notification.data?.text }}
+        <br>
+        <small>De: {{ notification.from?.name || 'Unknown' }}</small>
+      </div>
+    } @empty {
+      <p>No hay notificaciones</p>
+    }
+  </div>
+</div>
