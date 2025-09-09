@@ -66,20 +66,6 @@ export class WebsocketService {
       console.log('Alarm response received:', data);
       this.messageSubject.next(JSON.stringify(data));
 
-      this.signalService.addSignal({
-        id: data.id ?? crypto.randomUUID(),
-        name: data.name ?? 'Unknown',
-        cellphone: data.cellphone ?? 'N/A',
-        device: data.device ?? 'N/A',
-        lat: data.location.lat,
-        lng: data.location.lng,
-        active: true
-      });
-
-      if (data.status === 'received') {
-        //sound alarm
-        this.playAlarmSound();
-      }
     });
 
     this.socket.on('alarm_notification', (data: any) => {
@@ -88,8 +74,17 @@ export class WebsocketService {
       this.playAlarmSound(); // Reproducir sonido para notificaciones
     });
 
-    this.socket.on('alarm_broadcast', (data: any) => {
-      console.log('Broadcast alarm received:', data);
+    this.socket.on('alarm_broadcast', (backendData: any) => {
+      const data = backendData.data;
+      this.signalService.addSignal({
+        id: data.id ?? crypto.randomUUID(),
+        name: data.name ?? 'Unknown',
+        cellphone: data.cellphone ?? 'N/A',
+        device: data.device ?? 'N/A',
+        lat: data.lat,
+        lng: data.lng,
+        active: true
+      });
       this.alarmNotificationSubject.next(data);
       this.playAlarmSound();
 
