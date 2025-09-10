@@ -1,1 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'material-icons/iconfont/material-icons.css';
+
+/* ===== PALETA ORIGINAL (Verde/Natural) ===== */
+:root {
+  --color-1: #44562f;
+  --color-2: #536441;
+  --color-3: #83934d;
+  --color-4: #b7c88d;
+  --color-5: #e9dfb4;
+  --color-5-hover: #e7e1c2;
+  --color-6: #efbfb3;
+  --color-7: #f8f6f1;
+  --color-8: #e1eae5;
+  --color-9: #a7d7b8;
+  --color-10: #66b2a0;
+  --color-11: #4e796b;
+  --color-white: #fff;
+  --color-12: #fff;
+  --color-13: #f8f9fa;
+
+  --background-color: var(--color-12);
+  --h1-color: var(--color-1);
+  --h2-color: var(--color-2);
+  --card-background-color: var(--color-12);
+  --card-background-color2: var(--color-13);
+  --card-border: 1px solid var(--color-5);
+  --card-border-radius: 15px;
+  --button-background-color: var(--color-5);
+  --button-hover-background-color: var(--color-5-hover);
+  --alarm-card-background-color: var(--color-white);
+  --alarm-border-left: 3px solid var(--color-6);
+  --navbar-background-color: var(--color-7);
+  --header-background-color: var(--color-8);
+  --slide-background-color: var(--color-13);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+body { font-family: 'Roboto', sans-serif; }
+
+body {
+  background-color: var(--background-color);
+  margin: 0;
+}
+
+.card {
+  border: var(--card-border);
+  border-radius: var(--card-border-radius);
+  background-color: var(--card-background-color2);
+}
+
+.maplibregl-control-container{
+  display: none;
+}

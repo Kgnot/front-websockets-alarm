@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.main-dashboard-component {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  height: 40em;
+  max-height: 100%;
+
+}

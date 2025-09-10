@@ -1,0 +1,30 @@
+nav {
+  display: flex;
+  justify-content: space-around; /* todos con el mismo espacio */
+  align-items: center;
+  background-color: var(--navbar-background-color);
+  padding: 0.8rem 0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333; /* texto en blanco por defecto */
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+nav a:hover {
+  background: rgba(164, 38, 38, 0.1);
+}
+
+nav a.active {
+  background: #fff;         /* resaltado */
+  color: var(--navbar-background-color);
+  font-weight: 600;
+}
+
+nav p{
+  cursor: pointer;
+}

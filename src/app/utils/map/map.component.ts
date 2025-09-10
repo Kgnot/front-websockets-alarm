@@ -45,12 +45,14 @@ export class MapComponent implements AfterViewInit {
 
         this.map.on('load', () => {
 
-          this.alarmService.signals$.subscribe(signals => {
-            signals.forEach(signal => {
-              if (signal.active) {
-                this.alarmPaintedService.paintSignal(this.map, signal.id, signal.lng, signal.lat);
+          this.alarmService.alarms$.subscribe(alarmList => {
+            alarmList.forEach(alarm => {
+              if (alarm.active) {
+                const lng = alarm.alarmUserDevice.location.lng;
+                const lat = alarm.alarmUserDevice.location.lat;
+                this.alarmPaintedService.paintSignal(this.map, alarm.id, lng, lat);
               } else {
-                this.alarmPaintedService.clearSignal(signal.id, this.map);
+                this.alarmPaintedService.clearSignal(alarm.id, this.map);
               }
             });
           });
