@@ -1,2 +1,11 @@
-<div id="map" style="width: 100%; height: 40em;"></div>
+<div #map class="maplibregl-map"></div>
 
+@if (showNotification()) {
+  <app-notification
+    [notification]="selectedAlarm()"
+    [x]="notificationX()"
+    [y]="notificationY()"
+    (openModalEvent)="onOpenModal($event)"
+    (deleteNotification)="onDeleteNotification($event)">
+  </app-notification>
+}

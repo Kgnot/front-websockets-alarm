@@ -1,18 +1,18 @@
-<div class="notification-card" [ngStyle]="positionStyle">
-  <div class="notification-content" (click)="openModal()">
+<div class="alarm-card">
+  <div class="notification-content">
     <div class="notification-header">
       <span class="notification-user">
-        {{ notification?.user?.name || 'Nombre usuario' }}
+        {{ alarm?.user?.name || 'Nombre usuario' }}
       </span>
       <span class="notification-time">
-        {{ (notification?.alarmUserDevice?.location?.timestamp | date:'shortTime') ?? 'Hora desconocida' }}
+        {{ (alarm?.alarmUserDevice?.location?.timestamp | date:'shortTime') ?? 'Hora desconocida' }}
       </span>
     </div>
 
     <div class="notification-body">
       <div class="notification-title">Alarma</div>
       <div class="notification-location">
-        {{ notification?.user?.address || 'Dirección desconocida' }}
+        {{ alarm?.user?.address || 'Dirección desconocida' }}
       </div>
     </div>
   </div>
@@ -24,4 +24,3 @@
     </button>
   </div>
 </div>
-

@@ -17,47 +17,47 @@
   }
 }
 
-.notification-content {
+.alarm-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.notification-header {
+.alarm-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.notification-user {
+.alarm-user {
   font-weight: 600;
   font-size: 1.2rem;
   color: #222;
 }
 
-.notification-time {
+.alarm-time {
   font-size: 0.8rem;
   color: #666;
 }
 
-.notification-body {
+.alarm-body {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.notification-title {
+.alarm-title {
   font-size: 0.9rem;
   color: #444;
 }
 
-.notification-location {
+.alarm-location {
   font-size: 0.85rem;
   color: #333;
 }
 
-.notification-action {
+.alarm-action {
   margin-left: 1rem;
   display: flex;
   align-items: center;
@@ -153,7 +153,7 @@ dialog p {
 *----------------
 */
 
-.notification-action {
+.alarm-action {
   margin-left: 1rem;
   display: flex;
   align-items: center;
@@ -162,12 +162,12 @@ dialog p {
   color: #333;
 }
 
-.notification-action span.material-icons {
+.alarm-action span.material-icons {
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
-.notification-action span.material-icons:hover {
+.alarm-action span.material-icons:hover {
   color: #007bff;
 }
 

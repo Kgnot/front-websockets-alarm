@@ -1,27 +1,62 @@
-import {AfterViewInit, Component, Inject, inject, PLATFORM_ID} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  inject,
+  OnDestroy,
+  PLATFORM_ID, signal,
+  ViewChild
+} from '@angular/core';
 import * as maplibregl from 'maplibre-gl';
 import {MapService} from '../../service/map.service';
 import {IdecaStyleService} from '../../service/ideca-style.service';
 import {AlarmPaintedService} from '../../service/alarm-painted.service';
 import {AlarmService} from '../../service/alarm.service';
 import {isPlatformBrowser} from '@angular/common';
+import {AlarmData} from '../../interfaces/alarm-data';
+import {NotificationComponent} from '../notification/notification.component';
 
 @Component({
   selector: 'app-map',
-  imports: [],
+  imports: [
+    NotificationComponent
+  ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss'
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnDestroy {
 
   private mapService = inject(MapService);
   private idecaStyleService = inject(IdecaStyleService);
   private alarmPaintedService = inject(AlarmPaintedService);
   private alarmService = inject(AlarmService);
 
+
   private map!: maplibregl.Map;
+  @ViewChild('map', {static: true}) mapContainer!: ElementRef<HTMLDivElement>;
+
+  // for modal:
+  protected selectedAlarm = signal<AlarmData | undefined>(undefined);
+  protected showNotification = signal(false);
+  protected notificationX = signal(0);
+  protected notificationY = signal(0);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  }
+
+  onOpenModal(alarm: AlarmData) {
+  }
+
+  onDeleteNotification(alarm: AlarmData) {
+    this.showNotification.set(false)
+  }
+
+  ngOnDestroy() {
+    if (this.map) {
+      this.map.remove();
+    }
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -34,31 +69,42 @@ export class MapComponent implements AfterViewInit {
       next: (IDECA_style) => {
         const convertedStyle = this.idecaStyleService.convert(IDECA_style);
 
-        this.map = new maplibregl.Map({
-          container: 'map',
-          style: convertedStyle,
-          center: [-74.1169134, 4.554351],
-          zoom: 18
-        });
+        if (!this.map) {
+          this.map = new maplibregl.Map({
+            container: this.mapContainer.nativeElement,
+            style: convertedStyle,
+            center: [-74.1169134, 4.554351],
+            zoom: 18
+          });
 
-        this.map.addControl(new maplibregl.NavigationControl());
+          this.map.addControl(new maplibregl.NavigationControl());
 
-        this.map.on('load', () => {
-
-          this.alarmService.alarms$.subscribe(alarmList => {
-            alarmList.forEach(alarm => {
-              if (alarm.active) {
-                const lng = alarm.alarmUserDevice.location.lng;
-                const lat = alarm.alarmUserDevice.location.lat;
-                this.alarmPaintedService.paintSignal(this.map, alarm.id, lng, lat);
-              } else {
-                this.alarmPaintedService.clearSignal(alarm.id, this.map);
+          this.map.on('load', () => {
+            this.alarmPaintedService.alarmClick$.subscribe(({alarmId, x, y}) => {
+              const clickedAlarm = this.alarmService.getAlarmById(alarmId);
+              if (clickedAlarm) {
+                this.selectedAlarm.set(clickedAlarm);
+                this.notificationX.set(x);
+                this.notificationY.set(y);
+                this.showNotification.set(true);
               }
+            });
+
+            this.alarmService.alarms$.subscribe(alarmList => {
+              alarmList.forEach(alarm => {
+                if (alarm.active) {
+                  const {lng, lat} = alarm.alarmUserDevice.location;
+                  this.alarmPaintedService.paintSignal(this.map, alarm.id, lng, lat);
+                } else {
+                  this.alarmPaintedService.clearSignal(alarm.id, this.map);
+                }
+              });
             });
           });
 
 
-        })
+        }
+
       },
       error: (error) => {
         console.error('Error al cargar el estilo IDECA:', error);
@@ -94,4 +140,5 @@ export class MapComponent implements AfterViewInit {
     map.addControl(new maplibregl.NavigationControl());
 
   }
+
 }
