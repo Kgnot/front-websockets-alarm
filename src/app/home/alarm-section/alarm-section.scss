@@ -1,0 +1,13 @@
+:root{
+  display: flex;
+  width: 100dvw;
+}
+.alarm-section {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8em;
+  box-sizing: border-box;
+}

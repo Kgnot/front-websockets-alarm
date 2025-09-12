@@ -1,0 +1,33 @@
+<div class="notification-card" [ngStyle]="positionStyle">
+  <!-- Botón de cerrar arriba a la derecha -->
+  <button class="close-btn" (click)="close()">
+    <span class="material-icons">close</span>
+  </button>
+
+  <!-- Contenido clickable -->
+  <div class="notification-content"> <!--Quiza pueda abrir un modal-->
+    <div class="notification-header">
+      <span class="notification-user">
+        {{ notification?.user?.name || 'Nombre usuario' }}
+      </span>
+      <span class="notification-time">
+        {{ (notification?.alarmUserDevice?.location?.timestamp | date:'shortTime') ?? 'Hora desconocida' }}
+      </span>
+    </div>
+
+    <div class="notification-body">
+      <div class="notification-title">Alarma</div>
+      <div class="notification-location">
+        {{ notification?.user?.address || 'Dirección desconocida' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Acciones -->
+  <div class="notification-action">
+    <span class="material-icons" (click)="pause()">volume_up</span>
+    <button class="delete-btn" (click)="delete()">
+      <span class="material-icons">delete</span>
+    </button>
+  </div>
+</div>

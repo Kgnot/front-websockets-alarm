@@ -13,6 +13,10 @@ export class AlarmService {
 
   private alarms: AlarmData[] = [];
 
+  getAlarmById(alarmId: string) {
+    return this.alarms.find(alarm => alarm.id === alarmId);
+  }
+
   addAlarm(alarm: AlarmData) {
     this.alarms.push(alarm);
     this.alarmSubject.next(this.alarms);

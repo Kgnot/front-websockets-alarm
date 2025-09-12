@@ -1,2 +1,9 @@
-<div id="map" style="width: 100%; height: 40em;"></div>
+<div #map class="maplibregl-map"></div>
 
+@if (facade.showNotification()) {
+  <app-notification-blob
+    [notification]="facade.selectedAlarm()!"
+    [x]="facade.notificationX()"
+    [y]="facade.notificationY()"
+  />
+}

@@ -12,7 +12,6 @@ export class WebsocketService {
 
   private socket: Socket;
   //private readonly serverUrl = 'http://localhost:3000';
-
   private readonly serverUrl = 'https://websocket-alarm.onrender.com';
 
   constructor(
@@ -69,7 +68,7 @@ export class WebsocketService {
 
     this.socket.on('alarm_notification', (backendData: any) => {
       const data = backendData.data;
-      console.log('Alarm notification received:', data);
+      console.log('Alarm notification-blob received:', data);
       this.notificationService.notifyAlarm(data);
     });
 

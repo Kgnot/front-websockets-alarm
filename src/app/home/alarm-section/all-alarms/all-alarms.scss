@@ -1,0 +1,67 @@
+/* Contenedor relativo para que el recuadro se posicione respecto al botón */
+.toggle-wrapper {
+  position: relative;
+  display: inline-block; /* el wrapper se ajusta al ancho del botón */
+}
+
+/* Botón */
+button {
+  background-color: var(--button-background-color, #bdbdbd);
+  color: #111111;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background-color: var(--button-hover-background-color, #0056b3);
+  }
+}
+
+/* Recuadro flotante */
+.alarms-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+
+  width: 300px;
+  max-height: 50vh;
+  overflow-y: auto;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.6rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 1rem;
+
+  z-index: 1000; /* que quede encima de todo */
+}
+
+/* Estado sin alarmas */
+.no-alarms {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+/* Cada alarma */
+app-alarm-element {
+  border: 1px solid #eee;
+  border-radius: 0.4rem;
+  padding: 0.6rem;
+  background: #fafafa;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+}

@@ -1,0 +1,19 @@
+<div class="connect-section">
+  <div>
+    <h1> Estado: {{ connectionStatus() }}</h1>
+  </div>
+  <div>
+    <button
+      (click)="connect()"
+      [disabled]="isConnected()"
+    >
+      Conectar
+    </button>
+    <button
+      (click)="disconnect()"
+      [disabled]="!isConnected()"
+    >
+      Desconectar
+    </button>
+  </div>
+</div>

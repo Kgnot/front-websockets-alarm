@@ -1,0 +1,22 @@
+<!-- Botón que abre/cierra -->
+<div class="toggle-wrapper">
+  <button (click)="changeValueToggleAlarm()">
+    {{ showAlarms() ? 'Ocultar alarmas activas' : 'Mostrar alarmas activas' }}
+  </button>
+
+  <!-- Recuadro flotante -->
+  @if (showAlarms()) {
+    <section class="alarms-dropdown">
+      @if (alarms().length === 0) {
+        <p class="no-alarms">No hay alarmas</p>
+      } @else {
+        @for (alarm of alarms(); track alarm.id) {
+          <app-alarm-element
+            [alarm]="alarm"
+            (deleteAlarm)="deleteAlarm($event)"
+          />
+        }
+      }
+    </section>
+  }
+</div>

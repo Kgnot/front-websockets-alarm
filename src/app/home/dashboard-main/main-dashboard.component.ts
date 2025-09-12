@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AlarmSection} from './alarm-section/alarm-section';
+import {AlarmSection} from '../alarm-section/alarm-section';
 import {MapComponent} from '../../utils/map/map.component';
 
 @Component({
