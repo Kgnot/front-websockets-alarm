@@ -2,12 +2,10 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  HostListener,
   Inject,
   inject,
   OnDestroy,
-  PLATFORM_ID, signal,
-  ViewChild
+  PLATFORM_ID, ViewChild
 } from '@angular/core';
 import * as maplibregl from 'maplibre-gl';
 import {MapService} from '../../service/map.service';
@@ -15,8 +13,9 @@ import {IdecaStyleService} from '../../service/ideca-style.service';
 import {AlarmPaintedService} from '../../service/alarm-painted.service';
 import {AlarmService} from '../../service/alarm.service';
 import {isPlatformBrowser} from '@angular/common';
-import {AlarmData} from '../../interfaces/alarm-data';
-import {NotificationComponent} from '../notification/notification.component';
+import {NotificationComponent} from '../notification-blob/notification.component';
+import {AlarmFacade} from '../../service/alarm-facade';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -32,31 +31,22 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private idecaStyleService = inject(IdecaStyleService);
   private alarmPaintedService = inject(AlarmPaintedService);
   private alarmService = inject(AlarmService);
+  protected facade = inject(AlarmFacade)
 
+  private alarmClickSub?: Subscription; // la dejo por si en un futuro se pasa algo
+  private renderAlarmsSub?: Subscription;
 
   private map!: maplibregl.Map;
   @ViewChild('map', {static: true}) mapContainer!: ElementRef<HTMLDivElement>;
 
-  // for modal:
-  protected selectedAlarm = signal<AlarmData | undefined>(undefined);
-  protected showNotification = signal(false);
-  protected notificationX = signal(0);
-  protected notificationY = signal(0);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
   }
 
-  onOpenModal(alarm: AlarmData) {
-  }
-
-  onDeleteNotification(alarm: AlarmData) {
-    this.showNotification.set(false)
-  }
-
   ngOnDestroy() {
-    if (this.map) {
-      this.map.remove();
-    }
+    this.alarmClickSub?.unsubscribe();
+    this.renderAlarmsSub?.unsubscribe();
+    if (this.map) this.map.remove();
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -79,32 +69,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
           this.map.addControl(new maplibregl.NavigationControl());
 
+          this.alarmPaintedService.setMap(this.map);
+
           this.map.on('load', () => {
-            this.alarmPaintedService.alarmClick$.subscribe(({alarmId, x, y}) => {
-              const clickedAlarm = this.alarmService.getAlarmById(alarmId);
-              if (clickedAlarm) {
-                this.selectedAlarm.set(clickedAlarm);
-                this.notificationX.set(x);
-                this.notificationY.set(y);
-                this.showNotification.set(true);
-              }
-            });
-
-            this.alarmService.alarms$.subscribe(alarmList => {
-              alarmList.forEach(alarm => {
-                if (alarm.active) {
-                  const {lng, lat} = alarm.alarmUserDevice.location;
-                  this.alarmPaintedService.paintSignal(this.map, alarm.id, lng, lat);
-                } else {
-                  this.alarmPaintedService.clearSignal(alarm.id, this.map);
-                }
-              });
-            });
+            this.listenAlarmClicks();
+            this.renderAlarms();
           });
-
-
         }
-
       },
       error: (error) => {
         console.error('Error al cargar el estilo IDECA:', error);
@@ -112,6 +83,29 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       }
     })
 
+  }
+
+  private listenAlarmClicks(): void {
+    this.alarmPaintedService.alarmClick$.subscribe(({alarmId, x, y}) => {
+      const clickedAlarm = this.facade.getAlarmById(alarmId);
+      if (!clickedAlarm) return;
+      this.facade.toggleNotification(clickedAlarm, x, y);
+    });
+  }
+
+  private renderAlarms(): void {
+    this.renderAlarmsSub?.unsubscribe();
+
+    this.renderAlarmsSub = this.alarmService.alarms$.subscribe(alarmList => {
+      alarmList.forEach(alarm => {
+        if (alarm.active) {
+          const {lng, lat} = alarm.alarmUserDevice.location;
+          this.alarmPaintedService.paintSignal(alarm.id, lng, lat);
+        } else {
+          this.alarmPaintedService.clearSignal(alarm.id, this.map);
+        }
+      });
+    });
   }
 
   private createFallbackMap(): void {
@@ -140,5 +134,4 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     map.addControl(new maplibregl.NavigationControl());
 
   }
-
 }

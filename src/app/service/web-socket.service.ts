@@ -69,7 +69,7 @@ export class WebsocketService {
 
     this.socket.on('alarm_notification', (backendData: any) => {
       const data = backendData.data;
-      console.log('Alarm notification received:', data);
+      console.log('Alarm notification-blob received:', data);
       this.notificationService.notifyAlarm(data);
     });
 

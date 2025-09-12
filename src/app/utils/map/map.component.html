@@ -1,11 +1,9 @@
 <div #map class="maplibregl-map"></div>
 
-@if (showNotification()) {
-  <app-notification
-    [notification]="selectedAlarm()"
-    [x]="notificationX()"
-    [y]="notificationY()"
-    (openModalEvent)="onOpenModal($event)"
-    (deleteNotification)="onDeleteNotification($event)">
-  </app-notification>
+@if (facade.showNotification()) {
+  <app-notification-blob
+    [notification]="facade.selectedAlarm()!"
+    [x]="facade.notificationX()"
+    [y]="facade.notificationY()"
+  />
 }

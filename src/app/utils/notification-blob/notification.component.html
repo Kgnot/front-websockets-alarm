@@ -1,5 +1,11 @@
 <div class="notification-card" [ngStyle]="positionStyle">
-  <div class="notification-content" (click)="openModal()">
+  <!-- Botón de cerrar arriba a la derecha -->
+  <button class="close-btn" (click)="close()">
+    <span class="material-icons">close</span>
+  </button>
+
+  <!-- Contenido clickable -->
+  <div class="notification-content"> <!--Quiza pueda abrir un modal-->
     <div class="notification-header">
       <span class="notification-user">
         {{ notification?.user?.name || 'Nombre usuario' }}
@@ -17,6 +23,7 @@
     </div>
   </div>
 
+  <!-- Acciones -->
   <div class="notification-action">
     <span class="material-icons" (click)="pause()">volume_up</span>
     <button class="delete-btn" (click)="delete()">
@@ -24,4 +31,3 @@
     </button>
   </div>
 </div>
-
