@@ -94,13 +94,13 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private renderAlarms(): void {
-    this.renderAlarmsSub?.unsubscribe();
-
-    this.renderAlarmsSub = this.alarmService.alarms$.subscribe(alarmList => {
+    this.alarmService.alarms$.subscribe(alarmList => {
       alarmList.forEach(alarm => {
+        console.log("alarm", alarm)
         if (alarm.active) {
           const {lng, lat} = alarm.alarmUserDevice.location;
           this.alarmPaintedService.paintSignal(alarm.id, lng, lat);
+          console.log("lng,lat", lng, "- ", lat)
         } else {
           this.alarmPaintedService.clearSignal(alarm.id, this.map);
         }
