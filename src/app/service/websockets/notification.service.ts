@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {AlarmData} from '../../interfaces/alarm-data';
 import {AlarmService} from '../alarm.service';
-import {adaptBackendToAlarmData} from '../../adapter/alarm-data-adapter';
+import {adaptBackendToAlarmData, adaptBackendToAlarmData2} from '../../adapter/alarm-data-adapter';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class NotificationService {
   }
 
   notifyAlarm(alarmBackend: any) {
-    const alarm: AlarmData = adaptBackendToAlarmData(alarmBackend);
+    const alarm: AlarmData = adaptBackendToAlarmData2(alarmBackend);
     this.alarmService.addAlarm(alarm);
     this.alarmNotification.next(alarm);
   }

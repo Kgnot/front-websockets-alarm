@@ -36,3 +36,18 @@ export function adaptBackendToAlarmData(data: any): AlarmData {
     active: data.active !== undefined ? data.active : true
   };
 }
+
+export function adaptBackendToAlarmData2(data: any): AlarmData {
+  return {
+    ...data,
+    alarmUserDevice: {
+      ...data.alarmUserDevice,
+      location: {
+        ...data.alarmUserDevice.location,
+        timestamp: data.alarmUserDevice.location.timestamp
+          ? new Date(data.alarmUserDevice.location.timestamp)
+          : new Date()
+      }
+    }
+  };
+}
