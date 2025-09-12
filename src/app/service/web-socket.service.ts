@@ -11,8 +11,7 @@ import {UserService} from './user/user.service';
 export class WebsocketService {
 
   private socket: Socket;
-  // private readonly serverUrl = 'http://localhost:3000';
-
+  //private readonly serverUrl = 'http://localhost:3000';
   private readonly serverUrl = 'https://websocket-alarm.onrender.com';
 
   constructor(
